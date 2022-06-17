@@ -2,12 +2,6 @@
 
 <head>
 	<title>Web Simulation of 3D distribution of galaxies &lt; 200 Mpc from Milky Way</title>
-
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-
-	<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-24341067-2"></script>
-
 	<script>
 
 		window.dataLayer = window.dataLayer || [];
@@ -52,8 +46,7 @@
 
 	<script type='text/javascript' src='three/tween.js'></script>
 	<script type='text/javascript' src='three/OrbitControls.js'></script>
-	<script type="text/javascript" src="https://aladin.u-strasbg.fr/AladinLite/api/v2/latest/aladin.min.js"
-		charset="utf-8"></script>
+
 </head>
 
 <body>
@@ -62,28 +55,31 @@
 
 	</div>
 	<div style="position: absolute; color: rgb(255, 255, 255); bottom: 10px; left: 0px;">
-		<h1>Galaxy Search</h1><input type="text" placeholder="Name / Catalog Number" id="srchkey"><button type="button"
+		<h1>Search</h1><input type="text" placeholder="Name / Catalog Number" id="srchkey"><button type="button"
 			onclick="searchfunc();" id="srchbtn">Search</button><br>
 
 		<br>
-		<h3><a href="https://github.com/RiteshSingh/galaxies/blob/master/galaxyname.txt" target="_blank">List of all
-				158 galaxies</a></h3>
+		<h3><a href="https://physics.mcmaster.ca/~harris/mwgc.dat" target="_blank">List of all
+				158 globular clusters</a></h3>
 	</div>
 	<div style="position: absolute; color: rgb(255, 255, 255); top: 0px; left: 0px;">
-		<h1 id="galaxyName2"></h1>
-		<p id="galaxyNames" style="margin-bottom: 1em;">E</p>
-		<div id="aladin-lite-div" style="width:300px;height:300px;">a</div><br>
+		<h1 id="objName"></h1>
+		<p id="objNames" style="margin-bottom: 1em;"></p>
+		<div id="aladin-lite-div" style="width:300px;height:300px;"></div><br>
+		<img src="" alt="" id="img">
+		<p id="distance"></p>
 
 
 	</div>
-	<div style="position: absolute; color: rgb(255, 255, 255); bottom: 0px; right: 0px;">
-		<h3>Distance: <span id="centerdist">200</span> Mpc (<span id="centerdistly">652.31</span> million light-years)
+	<!-- <div style="position: absolute; color: rgb(255, 255, 255); bottom: 0px; right: 0px;">
+		<h3>Distance: <span id="centerdist">200</span> kpc (<span id="centerdistly">652.31</span> thousand light-years)
 		</h3>
-	</div>
+	</div> -->
 
 
 	<script src="index.js"></script>
-
+	<script type="text/javascript" src="https://aladin.u-strasbg.fr/AladinLite/api/v2/latest/aladin.min.js"
+		charset="utf-8"></script>
 
 </body>
 

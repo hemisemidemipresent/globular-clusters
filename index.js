@@ -26,18 +26,17 @@ controls.rotateSpeed = 0.7;
 
 // axes
 
-const axesHelper = new THREE.AxesHelper(8.5);
-scene.add(axesHelper);
+const axesHelper = new THREE.AxesHelper(-8.5);
+//scene.add(axesHelper);
 
 // Milky Way Disk
-const texture = new THREE.TextureLoader().load('galaxy.jpg');
+const texture = new THREE.TextureLoader().load('milkyway.png');
 
-const mwGeometry = new THREE.CircleGeometry(22, 128);
+const mwGeometry = new THREE.CircleGeometry(22.15, 128);
 const material = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.25,
-    map: texture
+    map: texture,
+    opacity: 0.5
 });
 
 const mwDisk = new THREE.Mesh(mwGeometry, material);
@@ -45,7 +44,7 @@ mwDisk.name = 'mwDisk';
 mwDisk.rotation.x = Math.PI / 2;
 mwDisk.rotation.z = -Math.PI / 2;
 
-// mwDisk.material.color.set(0x495a85);
+mwDisk.material.color.set(0x888888);
 
 scene.add(mwDisk);
 
@@ -57,7 +56,7 @@ colors.fill({ r: 1, g: 1, b: 1 });
 let dotGeometry = new THREE.Geometry();
 
 let rawFile = new XMLHttpRequest();
-rawFile.open('GET', 'galaxydata.txt', false);
+rawFile.open('GET', 'data.txt', false);
 rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4) {
         if (rawFile.status === 200 || rawFile.status == 0) {
@@ -75,7 +74,7 @@ rawFile.onreadystatechange = function () {
 rawFile.send(null);
 let names;
 rawFile = new XMLHttpRequest();
-rawFile.open('GET', 'galaxyname.txt', false);
+rawFile.open('GET', 'name.txt', false);
 rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4) {
         if (rawFile.status === 200 || rawFile.status == 0) {
@@ -122,10 +121,10 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-let centerindex = 0; // central galaxy
-let centerdist = document.getElementById('centerdist');
-let centerdistval = 200;
-let startstring = document.getElementById('startstring');
+let centerindex = 0;
+// let centerdist = document.getElementById('centerdist');
+// let centerdistval = 200;
+// let startstring = document.getElementById('startstring');
 let selectedObject = -1;
 let clickedObject = -1;
 
@@ -157,13 +156,13 @@ function searchfunc() {
                 if (centerindex !== i) dots.geometry.colors[centerindex] = new THREE.Color('#fff');
                 centerindex = i;
 
-                updateGalaxyPage(i);
+                updatePage(i);
                 updateCenterGUI();
                 break;
             }
         } else {
             if (name.replace(/[^A-Z0-9]/gi, '').toLowerCase() == key) {
-                updateGalaxyPage(i);
+                updatePage(i);
                 found = true;
                 break;
             }
@@ -196,7 +195,7 @@ function onDocumentMouseClick(event) {
     if (idx) {
         if (centerindex !== idx) dots.geometry.colors[centerindex] = new THREE.Color('#fff');
 
-        updateGalaxyPage(idx);
+        updatePage(idx);
 
         dots.geometry.colorsNeedUpdate = true;
         clickedObject = idx;
@@ -228,32 +227,34 @@ function getIntersect(x, y) {
         return index;
     }
 }
-let galaxyName = document.getElementById('galaxyName');
-let galaxyName2 = document.getElementById('galaxyName2');
-let galaxyNames = document.getElementById('galaxyNames');
+let objName = document.getElementById('objName');
+let objNames = document.getElementById('objNames');
 
-let galaxyColor = document.getElementById('galaxyColor');
 let image = document.getElementById('image');
 
 let aladinDiv = document.getElementById('aladin-lite-div');
-function updateGalaxyPage(i) {
+let img = document.getElementById('img');
+let distance = document.getElementById('distance'); // distance to cluster from earth
+
+function updatePage(i) {
     let name = names[i];
     dots.geometry.colors[clickedObject] = new THREE.Color('#fff');
     dots.geometry.colors[i] = new THREE.Color('#f0f');
 
-    let firstname = name.split(',')[0];
-
-    galaxyName2.innerText = firstname;
-    galaxyNames.innerText = name;
+    let tokens = name.split(',');
+    let firstname = tokens.length > 1 ? tokens[1] : tokens[0];
+    let propername = tokens[1];
+    objName.innerText = firstname;
+    objNames.innerText = name;
 
     if (typeof A !== 'undefined') {
         let d = dots.geometry.vertices[i].length(); // distance
-        let fov = 1;
-        fov /= d / 2;
-        if (fov > 1) fov = 1;
-        A.aladin('#aladin-lite-div', { target: firstname, fov, showLayersControl: false, showGotoControl: false });
+        A.aladin('#aladin-lite-div', { target: firstname, fov: 0.5, showLayersControl: false, showGotoControl: false });
     } else {
     }
+
+    let dist = dots.geometry.vertices[i].distanceTo(new THREE.Vector3(-8.5, 0, 0));
+    distance.innerText = `Distance from us: ${(dist * 3.262).toFixed(1)} kly / ${dist.toFixed(1)} kpc`;
     let oldPos = camera.position;
     let newPos = dots.geometry.vertices[i].clone();
     newPos = newPos.multiplyScalar(1.2);
@@ -275,8 +276,8 @@ function updateGalaxyPage(i) {
     onDocumentMouseMove();
 }
 function updateCenterGUI() {
-    let cameraloc = camera.position;
-    centerdistval = cameraloc.distanceTo(dots.geometry.vertices[centerindex]);
-    centerdist.innerHTML = centerdistval.toFixed(2);
-    centerdistly.innerHTML = (3.262 * centerdistval).toFixed(2);
+    // let cameraloc = camera.position;
+    // centerdistval = cameraloc.distanceTo(dots.geometry.vertices[centerindex]);
+    // centerdist.innerHTML = centerdistval.toFixed(2);
+    // centerdistly.innerHTML = (3.262 * centerdistval).toFixed(2);
 }
