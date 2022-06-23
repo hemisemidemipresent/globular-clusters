@@ -33,10 +33,11 @@ const axesHelper = new THREE.AxesHelper(-8.5);
 const texture = new THREE.TextureLoader().load('milkyway.png');
 
 const mwGeometry = new THREE.CircleGeometry(22.15, 128);
-const material = new THREE.MeshStandardMaterial({
+const material = new THREE.MeshPhysicalMaterial({
     side: THREE.DoubleSide,
     map: texture,
-    opacity: 0.5
+    transmission: 0.5,
+    transparent: true
 });
 
 const mwDisk = new THREE.Mesh(mwGeometry, material);
